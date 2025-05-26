@@ -5,6 +5,11 @@ authors = []
 telemetry = true
 cache_dir = '.\.cache'
 requirements = []
+[contracts.badge-minting]
+path = 'contracts/badge-minting.clar'
+clarity_version = 3
+epoch = 3.0
+
 [contracts.badge-wallet]
 path = 'contracts/badge-wallet.clar'
 clarity_version = 3
