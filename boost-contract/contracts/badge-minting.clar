@@ -139,40 +139,41 @@
 )
 
 ;; Transfer badge (with restrictions for achievement badges)
-;; (define-public (transfer-badge (badge-id uint) (sender principal) (recipient principal))
-;;     (begin
-;;         ;; Only badge owner can transfer
-;;         (asserts! (is-eq tx-sender sender) ERR-NOT-AUTHORIZED)
+(define-public (transfer-badge (badge-id uint) (sender principal) (recipient principal))
+    (begin
+        ;; Only badge owner can transfer
+        (asserts! (is-eq tx-sender sender) ERR-NOT-AUTHORIZED)
         
-;;         ;; Check if badge exists and sender owns it
-;;         (asserts! (is-eq (some sender) (nft-get-owner? achievement-badge badge-id)) ERR-NOT-AUTHORIZED)
+        ;; Check if badge exists and sender owns it
+        (asserts! (is-eq (some sender) (nft-get-owner? achievement-badge badge-id)) ERR-NOT-AUTHORIZED)
         
-;;         ;; Transfer the NFT
-;;         (try! (nft-transfer? achievement-badge badge-id sender recipient))
+        ;; Check if badge info exists
+        (asserts! (is-some (map-get? badge-recipients badge-id)) ERR-BADGE-NOT-FOUND)
         
-;;         ;; Update recipient tracking
-;;         (match (map-get? badge-recipients badge-id)
-;;             badge-info 
-;;             (map-set badge-recipients badge-id (merge badge-info { recipient: recipient }))
-;;             (err ERR-BADGE-NOT-FOUND)
-;;         )
+        ;; Transfer the NFT
+        (try! (nft-transfer? achievement-badge badge-id sender recipient))
         
-;;         ;; Update badge lists for both sender and recipient
-;;         (let 
-;;             (
-;;                 (sender-badges (filter-badge-from-list 
-;;                     (default-to (list) (map-get? recipient-badges sender)) 
-;;                     badge-id))
-;;                 (recipient-badges-list (default-to (list) (map-get? recipient-badges recipient)))
-;;             )
-;;             (map-set recipient-badges sender sender-badges)
-;;             (map-set recipient-badges recipient 
-;;                 (unwrap-panic (as-max-len? (append recipient-badges-list badge-id) u100)))
-;;         )
+        ;; Update recipient tracking
+        (let ((badge-info (unwrap-panic (map-get? badge-recipients badge-id))))
+            (map-set badge-recipients badge-id (merge badge-info { recipient: recipient }))
+        )
         
-;;         (ok true)
-;;     )
-;; )
+        ;; Update badge lists for both sender and recipient
+        (let 
+            (
+                (sender-badges (filter-badge-from-list 
+                    (default-to (list) (map-get? recipient-badges sender)) 
+                    badge-id))
+                (recipient-badges-list (default-to (list) (map-get? recipient-badges recipient)))
+            )
+            (map-set recipient-badges sender sender-badges)
+            (map-set recipient-badges recipient 
+                (unwrap-panic (as-max-len? (append recipient-badges-list badge-id) u100)))
+        )
+        
+        (ok true)
+    )
+)
 
 ;; Read-only functions
 
