@@ -5,6 +5,11 @@ authors = []
 telemetry = true
 cache_dir = '.\.cache'
 requirements = []
+[contracts.Badge-revocation]
+path = 'contracts/Badge-revocation.clar'
+clarity_version = 3
+epoch = 3.0
+
 [contracts.badge-minting]
 path = 'contracts/badge-minting.clar'
 clarity_version = 3
