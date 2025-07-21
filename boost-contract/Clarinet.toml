@@ -10,6 +10,11 @@ path = 'contracts/badge-minting.clar'
 clarity_version = 3
 epoch = 3.0
 
+[contracts.badge-verification]
+path = 'contracts/badge-verification.clar'
+clarity_version = 3
+epoch = 3.0
+
 [contracts.badge-wallet]
 path = 'contracts/badge-wallet.clar'
 clarity_version = 3
