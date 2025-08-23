@@ -24,6 +24,11 @@ epoch = 3.0
 path = 'contracts/badge-wallet.clar'
 clarity_version = 3
 epoch = 3.0
+
+[contracts.point-reward-system]
+path = 'contracts/point-reward-system.clar'
+clarity_version = 3
+epoch = 3.0
 [repl.analysis]
 passes = ['check_checker']
 
